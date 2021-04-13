@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+
+const getBase64 = (file) => {
+  const fr = new FileReader();
+  fr.addEventListener("load", (e) => {
+    document.getElementById("img").src = e.target.result;
+    document.getElementById("b64").innerHTML = e.target.result;
+  });
+  fr.readAsDataURL(file);
+};
 
 function App() {
+  const [img, setImg] = useState();
+
+  useEffect(() => {
+    if (img) getBase64(img);
+  }, [img]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <input
+        id="file"
+        name="file"
+        type="file"
+        onChange={(event) => {
+          setImg(event.currentTarget.files[0]);
+        }}
+      />
+    <p id="b64"></p>
+    <img id="img" height="150" />
     </div>
   );
 }
